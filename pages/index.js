@@ -1,65 +1,52 @@
+import Link from 'next/link'
+import Navbar from './Navbar'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+var c_name= 'USA'
 
-export default function Home() {
+
+const index = (props) => {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+    
+    <div>
+        <Head>
+          <link href='https://bootswatch.com/4/darkly/bootstrap.min.css' rel='stylesheet'></link>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+        </Head>
+        <Navbar></Navbar>
+        <div className='container'> <br></br>
+          <h1 className='heading-3'>Get Country Info</h1> <br></br>
+          <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Country Name" id='name' aria-label="Recipient's username" aria-describedby="basic-addon2"></input>
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" onClick={handler} type="button"><i className='fa fa-search'></i> </button>
+              </div>
+          </div>
+          <div className='jumbotron'>
+            <p id='nam'></p> <img src='' id='flag' height='10vh'></img>
+            <p id='capital' className='lead'></p>
+            <p id='region' className='lead'></p>
+            <p id='sub' className='lead'></p>
+            <p id='lang' className='lead'></p>
+            <p id='area' className='lead'></p>
+            <p id='time' className='lead'></p>
+            <p id='pop' className='lead'></p>
+          </div>
+    </div></div>
   )
 }
+const handler = async()=>{
+  c_name = document.getElementById("name").value;
+  console.log(c_name)
+    const res = await fetch('https://restcountries.eu/rest/v2/name/'+c_name+'?fullText=true')
+    const data = await res.json();
+    document.getElementById("nam").innerHTML="<b>Name: </b>"+data[0].nativeName
+    document.getElementById("capital").innerHTML="<b>Capital: </b>"+data[0].capital
+    document.getElementById("region").innerHTML="<b>Region: </b>"+data[0].region
+    document.getElementById("sub").innerHTML="<b>Subregion: </b>"+data[0].subregion
+    document.getElementById("area").innerHTML="<b>Area: </b>"+data[0].area + "sq km."
+    document.getElementById("time").innerHTML="<b>Timezone: </b>"+data[0].timezones[0]
+    document.getElementById("lang").innerHTML="<b>Languages: </b>"+data[0].languages[0].name + "/" + data[0].languages[0].nativeName
+    document.getElementById("pop").innerHTML="<b>Population: </b>"+data[0].population
+    document.getElementById("flag").src = data[0].flag
+}
+export default index;
